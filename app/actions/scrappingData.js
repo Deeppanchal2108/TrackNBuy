@@ -5,8 +5,18 @@ import * as cheerio from 'cheerio';
 
 export async function scrapping(params) {
     console.log("Into the server actions ")
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+        headless: false,
+        args: [`
+            ${process.env.PROXY_HOST}`], 
+    })
     const page = await browser.newPage()
+
+    await page.authenticate({
+        username:process.env.PROXY_USERNAME,
+        password: process.env.PROXY_PASSWORD
+    });
+
     const userInputURL = params.url;
     await page.goto(userInputURL, {
         waitUntil: 'domcontentloaded', 
@@ -23,14 +33,45 @@ export async function scrapping(params) {
     //Fetch title 
     console.log("Fetching the values")
     const title = $("span#productTitle.a-size-large.product-title-word-break").text();
-    console.log("Title : ", title)
-    const rating = $("span.a-size-base.a-color-base").text()
-    console.log("Rating : ",rating)
-    const symbol = $("span.a-price-symbol")
+    // console.log("Title : ", title)
+
+    //Symbol of the currency 
+    const symbol = $("span.a-price-symbol").first().text().trim();
     // console.log("Symbol : ",symbol)
-    const price = $("span.a-size-small.aok-offscreen").text();
-    console.log("Price : ", price)
-    const discountedPrice = $("span#")
+
+    //Actual price
+    const price = $("span.a-size-small.aok-offscreen").text().replace(/[^\d.,]/g, '').replace(/^\.*/, '').trim();;
+    // console.log("Price : ", price)
+
+    //Discounted price
+    const discountedPrice = $("span.a-price-whole").first().text().trim();
     // console.log("Discounted Price : ", discountedPrice)
+
+    //Discount Percentage 
+    const discountPercentage = $('span.savingsPercentage').text().trim().replace(/[^0-9]/g, '');
+    // console.log("Discount Percentage : ", discountPercentage)
+    
+
+    //Image Url of the product
+    const imageUrl = $('img#landingImage').attr('src');
+// console.log("IMage url : ",imageUrl)
+    const descriptions = [];
+    $('ul.a-unordered-list.a-vertical.a-spacing-mini li span.a-list-item').each((i, element) => {
+        descriptions.push($(element).text().trim());
+    });
+    // console.log("Descrpiton : ",descriptions);
+
+    const productData = {
+        "RedirectedUrl":page.url(),
+        "Title": title,
+        "Symbol": symbol,
+        "Price": price,
+        "DiscountedPrice": discountedPrice,
+        "DiscountedPercentage": discountPercentage,
+        "ImageUrl": imageUrl,
+        "Description": descriptions,
+        
+    }
+    console.log("Product Details : ",productData)
     return {message:"Done implemeting task"}
 }
