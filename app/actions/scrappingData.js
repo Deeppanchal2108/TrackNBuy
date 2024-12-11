@@ -1,21 +1,20 @@
 "use server"
 import puppeteer from "puppeteer";
 import * as cheerio from 'cheerio';
-
-
 export async function scrapping(params) {
     console.log("Into the server actions ")
-    const browser = await puppeteer.launch({
-        headless: false,
-        args: [`
-            ${process.env.PROXY_HOST}`], 
-    })
+    const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
-    await page.authenticate({
-        username:process.env.PROXY_USERNAME,
-        password: process.env.PROXY_PASSWORD
-    });
+    // {
+    //     headless: false,
+    //         args: [`
+    //         ${process.env.PROXY_HOST}`], 
+    // }
+    // await page.authenticate({
+    //     username:process.env.PROXY_USERNAME,
+    //     password: process.env.PROXY_PASSWORD
+    // });
 
     const userInputURL = params.url;
     await page.goto(userInputURL, {
@@ -40,7 +39,7 @@ export async function scrapping(params) {
     // console.log("Symbol : ",symbol)
 
     //Actual price
-    const price = $("span.a-size-small.aok-offscreen").text().replace(/[^\d.,]/g, '').replace(/^\.*/, '').trim();;
+    const price = $("span.a-size-small.aok-offscreen").text().replace(/[^\d.,]/g, '').replace(/^\.*/, '').trim();
     // console.log("Price : ", price)
 
     //Discounted price
@@ -70,7 +69,7 @@ export async function scrapping(params) {
         "DiscountedPercentage": discountPercentage,
         "ImageUrl": imageUrl,
         "Description": descriptions,
-        
+
     }
     console.log("Product Details : ",productData)
     return {message:"Done implemeting task"}
