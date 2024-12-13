@@ -5,7 +5,7 @@ export async function scrapping(params) {
     console.log("Into the server actions ")
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
-
+   //Bright data things 
     // {
     //     headless: false,
     //         args: [`
