@@ -5,17 +5,7 @@ export async function scrapping(params) {
     console.log("Into the server actions ")
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
-   //Bright data things 
-    // {
-    //     headless: false,
-    //         args: [`
-    //         ${process.env.PROXY_HOST}`], 
-    // }
-    // await page.authenticate({
-    //     username:process.env.PROXY_USERNAME,
-    //     password: process.env.PROXY_PASSWORD
-    // });
-
+    
     const userInputURL = params.url;
     await page.goto(userInputURL, {
         waitUntil: 'domcontentloaded', 
