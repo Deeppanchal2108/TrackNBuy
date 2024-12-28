@@ -1,6 +1,20 @@
 "use server"
 import puppeteer from "puppeteer";
+import {  z } from "zod"
 import * as cheerio from 'cheerio';
+
+const productSchema = z.object({
+    userId: z.number(),
+    title: z.string(),
+    url: z.string(),
+    redirectUrl: z.string(),
+    symbol: z.string(),
+    price: z.string(),
+    discountedPrice: z.string(),
+    discountPercentage: z.string(),
+    imageUrl: z.string(),
+    descriptions: z.array(z.string())
+})
 export async function scrapping(params) {
     console.log("Into the server actions ")
     const browser = await puppeteer.launch()
@@ -48,19 +62,29 @@ export async function scrapping(params) {
     $('ul.a-unordered-list.a-vertical.a-spacing-mini li span.a-list-item').each((i, element) => {
         descriptions.push($(element).text().trim());
     });
-    // console.log("Descrpiton : ",descriptions);
+    console.log("Descrpiton : ",descriptions);
 
     const productData = {
-        "RedirectedUrl":page.url(),
-        "Title": title,
-        "Symbol": symbol,
-        "Price": price,
-        "DiscountedPrice": discountedPrice,
-        "DiscountedPercentage": discountPercentage,
-        "ImageUrl": imageUrl,
-        "Description": descriptions,
-
+        userId: 1,
+        url: userInputURL,
+        redirectUrl:page.url(),
+        title: title,
+        symbol: symbol,
+        price: price,
+        discountedPrice: discountedPrice,
+        discountPercentage: discountPercentage,
+        imageUrl: imageUrl,
+        descriptions: descriptions,
     }
-    console.log("Product Details : ",productData)
+
+    const result = productSchema.safeParse(productData)
+    if (result.success) {
+        console.log("Result printed successfully")
+    } else {
+        console.log("Error in the result  ",
+            result.error.errors
+        )  
+    }
+    // console.log("Product Details : ",productData)
     return {message:"Done implemeting task"}
 }
