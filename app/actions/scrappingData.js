@@ -85,6 +85,6 @@ export async function scrapping(params) {
             result.error.errors
         )  
     }
-    // console.log("Product Details : ",productData)
+    console.log("Product Details : ",productData)
     return {message:"Done implemeting task"}
 }
