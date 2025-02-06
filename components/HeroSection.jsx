@@ -1,14 +1,13 @@
-"use client";
+
 
 import React from 'react';
-import Image from 'next/image';
+
 import { Button } from '@/components/ui/button';
 import { CircleCheckBig, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 function HeroSection() {
     return (
-        <div className='relative bg-[#f4ede4] w-full min-h-[90vh] flex flex-col lg:flex-row items-center justify-between px-10 md:px-10 py-8 lg:py-8 overflow-hidden'>
+        <div className='relative bg-[#f4ede4] w-full min-h-[90vh] flex flex-col lg:flex-row items-center justify-between px-10 md:px-10  pb-16  lg:pb-8 overflow-hidden'>
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute inset-0" style={{
@@ -18,7 +17,7 @@ function HeroSection() {
             </div>
 
             {/* Text Content */}
-            <div className='relative flex flex-col space-y-8 lg:space-y-10 max-w-2xl lg:text-left z-10'>
+            <div className='relative flex flex-col space-y-4 lg:space-y-6 max-w-2xl lg:text-left z-10 '>
                
 
                 <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold font-sans tracking-tight text-black leading-[1.1] lg:leading-[1.1]'>
@@ -29,20 +28,20 @@ function HeroSection() {
                     smarter
                 </h1>
 
-                <p className="text-lg text-gray-600 max-w-xl">
+                <p className="lg:text-lg text-base text-gray-600 max-w-xl">
                     Experience the future of smart shopping with real-time tracking, instant alerts, and automated purchases at the best prices.
                 </p>
 
                 <div className='flex flex-col space-y-4'>
                     <div className='flex items-center space-x-3 group'>
                         <CircleCheckBig className='text-green-600 w-6 h-6 flex-shrink-0 transition-transform group-hover:scale-110' />
-                        <h3 className='text-base lg:text-lg text-gray-700'>
+                        <h3 className='lg:text-lg text-sm text-gray-700'>
                             Stay ahead with real-time price tracking and instant alerts
                         </h3>
                     </div>
                     <div className='flex items-center space-x-3 group'>
                         <CircleCheckBig className='text-green-600 w-6 h-6 flex-shrink-0 transition-transform group-hover:scale-110' />
-                        <h3 className='text-base lg:text-lg text-gray-700'>
+                        <h3 className='lg:text-lg text-sm text-gray-700'>
                             Save big with exclusive early-bird deals and notifications
                         </h3>
                     </div>
@@ -71,7 +70,7 @@ function HeroSection() {
                         width={600}
                         height={400}
                         className='rounded-2xl shadow-2xl border border-white/20 backdrop-blur-sm'
-                        priority
+                  
                     />
 
                     {/* Price Alert Card */}
