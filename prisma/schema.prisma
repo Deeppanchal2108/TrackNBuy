@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model to store user information
+model User {
+  id            Int       @id @default(autoincrement()) // Auto incrementing user ID
+  clerkId       String    @unique                      // Clerk authentication ID
+  email         String    @unique                      // User's email (used for login/notification)
+  password      String?   // Password (only if using password auth, otherwise null)
+  firstName     String    // User's first name
+  lastName      String    // User's last name
+  lastEmailSent DateTime? // Timestamp of last email sent (for cron job tracking)
+  createdAt     DateTime  @default(now())              // Timestamp when the user was created
+  updatedAt     DateTime  @updatedAt                   // Timestamp when user info was last updated
+
+  // Relations
+  products      Product[] 
+  emailLogs     EmailLog[] 
+}
+
+// Product model to store product details
+model Product {
+  id                Int       @id @default(autoincrement()) // Auto incrementing product ID
+  title             String    // Product title (name)
+  url               String    @unique                      // URL of the product (e.g., Amazon product link)
+  redirectedUrl     String    // The redirected URL (e.g., final link after any redirects)
+  symbol            String?   // Currency symbol (e.g., $, €, ₹)
+  price             Decimal   // Original price of the product
+  discountedPrice   Decimal?  // Discounted price of the product
+  discountPercentage Float?   // Discount percentage (if any)
+  imageUrl          String?   // URL of the product image
+  description       String?   // Product description
+  currentPrice      Decimal   // Current price of the product
+  createdAt         DateTime  @default(now())              // Timestamp when product was added
+  updatedAt         DateTime  @updatedAt                   // Timestamp when product price was last updated
+
+  // Foreign key reference
+  userId            Int       
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade) 
+
+  // Price tracking
+  priceHistory     PriceHistory[] 
+}
+
+// PriceHistory model to track historical price changes
+model PriceHistory {
+  id          Int       @id @default(autoincrement()) // Auto incrementing ID
+  price       Decimal   // Price of the product at a particular time
+  date        DateTime  @default(now())               // Timestamp when the price was recorded
+
+  // Foreign key reference
+  productId   Int       
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade) 
+}
+
+// EmailLog model to track emails sent to users
+model EmailLog {
+  id        Int      @id @default(autoincrement()) 
+  userId    Int
+  emailType String   // Example: "price_drop_alert", "newsletter"
+  sentAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
