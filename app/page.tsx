@@ -6,13 +6,16 @@ import WhatExpect from '@/components/WhatExpect'
 import Footer from '@/components/Footer'
 import { scrapping } from '@/actions/scrappingUrl'
 import { useState } from 'react'
-import { useUser } from '@clerk/nextjs'
+
 import { Button } from '@/components/ui/button'
 import { Input } from "@/components/ui/input"
+import { useUser } from '@clerk/nextjs'
 
 export default function Home() {
-  const user = useUser();
-  console.log("User : ", user)
+  
+  const  {user}  = useUser();
+
+  const [url, setUrl] = useState('');
   if (!user) {
     return (
       <div>
@@ -25,7 +28,8 @@ export default function Home() {
     );
   }
 
-  const [url, setUrl] = useState('');
+  console.log("User : ", user)
+
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +37,7 @@ export default function Home() {
     console.log("Here is the user entered URL: ", url);
     if (url.includes("amazon") || url.includes("amzn")) {
       console.log("Here comes Amazon link");
-      const message = await scrapping(url);
+      const message = await scrapping(user.id,url);
       console.log("Here is the message: ", message);
     } else {
       console.log("Link is not from Amazon, hence can't track this one");

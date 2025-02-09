@@ -35,7 +35,7 @@ model Product {
   discountedPrice   Decimal?  // Discounted price of the product
   discountPercentage Float?   // Discount percentage (if any)
   imageUrl          String?   // URL of the product image
-  description       String?   // Product description
+  description       String[] // Product description
   currentPrice      Decimal   // Current price of the product
   createdAt         DateTime  @default(now())              // Timestamp when product was added
   updatedAt         DateTime  @updatedAt                   // Timestamp when product price was last updated

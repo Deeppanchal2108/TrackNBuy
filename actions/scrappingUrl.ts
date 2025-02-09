@@ -3,18 +3,8 @@ import puppeteer from "puppeteer";
 import { z } from "zod"
 import * as cheerio from 'cheerio';
 import { getUserIdfromClerkId } from "./userAction";
-const productSchema = z.object({
-    userId: z.number(),
-    title: z.string(),
-    url: z.string(),
-    redirectUrl: z.string(),
-    symbol: z.string(),
-    price: z.string(),
-    discountedPrice: z.string(),
-    discountPercentage: z.string(),
-    imageUrl: z.string(),
-    descriptions: z.array(z.string())
-})
+import prisma from "@/lib/prisma";
+
 
 
 export async function scrapping(clerkId: string, url: string) {
@@ -73,30 +63,26 @@ export async function scrapping(clerkId: string, url: string) {
             throw new Error("User Id not found");
         }
 
-        const userId = resultU.id;
+        const userId: string = resultU.id ?? '';
 
-        const productData = {
-            userId: userId,
-            url: userInputURL,
-            redirectUrl: page.url(),
-            title: title,
-            symbol: symbol,
-            price: price,
-            discountedPrice: discountedPrice,
-            discountPercentage: discountPercentage,
-            imageUrl: imageUrl,
-            descriptions: descriptions,
-        };
-
-        const result = productSchema.safeParse(productData);
-        if (result.success) {
-            console.log("Result printed successfully");
-        } else {
-            console.log("Error in the result ", result.error.errors);
-        }
-
-        console.log("Product Details : ", productData);
-
+        
+            const product =await prisma.product.create({
+                data: {
+                    currentPrice: price,
+                    userId: userId?.toString(),
+                    url: userInputURL,
+                    redirectedUrl: page.url(),
+                    title: title,
+                    symbol: symbol,
+                    price: parseFloat(price),
+                    discountedPrice: discountedPrice,
+                    discountPercentage:parseFloat(discountPercentage),
+                    imageUrl: imageUrl,
+                    description: descriptions,
+                }
+            })
+    
+console.log('Product L : ',product)
         return { message: "Done implementing task" };
     } catch (error) {
         console.error("Error during scraping:", error);

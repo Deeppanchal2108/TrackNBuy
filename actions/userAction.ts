@@ -11,7 +11,7 @@ const userSchema = z.object({
 type User=z.infer<typeof userSchema>
 export async function syncUser(params: User) {
     try {
-        // Validate input data
+        
         const validatedUser = userSchema.parse(params);
         const userExists = await prisma.user.findUnique({
             where: { clerkId: validatedUser.clerkId },
