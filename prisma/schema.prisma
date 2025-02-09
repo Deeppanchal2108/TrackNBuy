@@ -9,7 +9,7 @@ datasource db {
 
 // User model to store user information
 model User {
-  id            Int       @id @default(autoincrement()) // Auto incrementing user ID
+  id        String   @id @default(cuid())
   clerkId       String    @unique                      // Clerk authentication ID
   email         String    @unique                      // User's email (used for login/notification)
 
@@ -26,7 +26,7 @@ model User {
 
 // Product model to store product details
 model Product {
-  id                Int       @id @default(autoincrement()) // Auto incrementing product ID
+   id        String   @id @default(cuid())
   title             String    // Product title (name)
   url               String    @unique                      // URL of the product (e.g., Amazon product link)
   redirectedUrl     String    // The redirected URL (e.g., final link after any redirects)
@@ -41,7 +41,7 @@ model Product {
   updatedAt         DateTime  @updatedAt                   // Timestamp when product price was last updated
 
   // Foreign key reference
-  userId            Int       
+  userId            String       
   user             User       @relation(fields: [userId], references: [id], onDelete: Cascade) 
 
   // Price tracking
@@ -50,19 +50,19 @@ model Product {
 
 // PriceHistory model to track historical price changes
 model PriceHistory {
-  id          Int       @id @default(autoincrement()) // Auto incrementing ID
+  id        String   @id @default(cuid())// Auto incrementing ID
   price       Decimal   // Price of the product at a particular time
   date        DateTime  @default(now())               // Timestamp when the price was recorded
 
   // Foreign key reference
-  productId   Int       
+  productId   String   
   product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade) 
 }
 
 // EmailLog model to track emails sent to users
 model EmailLog {
-  id        Int      @id @default(autoincrement()) 
-  userId    Int
+  id        String   @id @default(cuid())
+  userId    String
   emailType String   // Example: "price_drop_alert", "newsletter"
   sentAt    DateTime @default(now())
 

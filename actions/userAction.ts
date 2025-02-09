@@ -32,3 +32,28 @@ export async function syncUser(params: User) {
         return { success: false, message: "Failed to create user" };
     }
 }
+
+type ResultType = {
+    success: boolean;
+    message: string;
+    id?: string;
+}
+
+export async function getUserIdfromClerkId(clerkId: string):Promise<ResultType> {
+    try {
+        const user  = await prisma.user.findUnique({
+            where: {
+                clerkId:clerkId
+            }
+        })
+
+        if (!user) {
+            throw new Error("User does not exists")
+        }
+        return {success:true ,message:"Successfully fetched clerk id ", id:user.id}
+        
+    } catch (error) {
+        return {success:false, message :String(error)}
+    }
+    
+}
