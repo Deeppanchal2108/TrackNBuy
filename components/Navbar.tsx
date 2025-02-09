@@ -2,8 +2,24 @@ import React from "react";
 import { UserButton, SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs';
 import { RainbowButton } from "./ui/rainbow-button";
 import Link from "next/link";
+import { syncUser } from "@/actions/userAction";
+import { currentUser } from "@clerk/nextjs/server";
 
-function Navbar() {
+
+async function Navbar() {
+  const user = await currentUser();
+  if (user) {
+    const result = await syncUser({
+      clerkId: user.id,
+      email: user.emailAddresses[0].emailAddress, // Fetching primary email
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+    });
+
+    if (result.success) {
+      console.log("success user")
+    }
+  }
   return (
     <nav className="bg-[#f4ede4] px-4 py-2 flex justify-between items-center">
       <div className="text-2xl font-bold">TrackNBuy</div>

@@ -12,7 +12,7 @@ model User {
   id            Int       @id @default(autoincrement()) // Auto incrementing user ID
   clerkId       String    @unique                      // Clerk authentication ID
   email         String    @unique                      // User's email (used for login/notification)
-  password      String?   // Password (only if using password auth, otherwise null)
+
   firstName     String    // User's first name
   lastName      String    // User's last name
   lastEmailSent DateTime? // Timestamp of last email sent (for cron job tracking)

@@ -4,7 +4,7 @@ import DemoSection from '@/components/DemoSection'
 import ProblemSection from '@/components/ProblemSection'
 import WhatExpect from '@/components/WhatExpect'
 import Footer from '@/components/Footer'
-import { Search } from 'lucide-react';
+import { scrapping } from '@/actions/scrappingUrl'
 import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
@@ -27,13 +27,14 @@ export default function Home() {
 
   const [url, setUrl] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
      console.log("Hello");
     console.log("Here is the user entered URL: ", url);
     if (url.includes("amazon") || url.includes("amzn")) {
       console.log("Here comes Amazon link");
-  
+      const message = await scrapping(url);
+      console.log("Here is the message: ", message);
     } else {
       console.log("Link is not from Amazon, hence can't track this one");
     }

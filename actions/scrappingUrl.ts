@@ -15,12 +15,12 @@ const productSchema = z.object({
     imageUrl: z.string(),
     descriptions: z.array(z.string())
 })
-export async function scrapping(params) {
+export async function scrapping(url:string){
     console.log("Into the server actions ")
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
-    const userInputURL = params.url;
+    const userInputURL = url;
     await page.goto(userInputURL, {
         waitUntil: 'domcontentloaded',
     });
@@ -58,7 +58,7 @@ export async function scrapping(params) {
     //Image Url of the product
     const imageUrl = $('img#landingImage').attr('src');
     // console.log("IMage url : ",imageUrl)
-    const descriptions = [];
+    const descriptions:string[] = [];
     $('ul.a-unordered-list.a-vertical.a-spacing-mini li span.a-list-item').each((i, element) => {
         descriptions.push($(element).text().trim());
     });
