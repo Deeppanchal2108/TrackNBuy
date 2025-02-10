@@ -1,13 +1,12 @@
 "use server"
 import puppeteer from "puppeteer";
-import { z } from "zod"
 import * as cheerio from 'cheerio';
 import { getUserIdfromClerkId } from "./userAction";
 import prisma from "@/lib/prisma";
-
+import { insertIntoPriceHistory } from "./priceHistory";
 
 export async function scrapping(clerkId: string, url: string) {
-    console.log("Into the server actions ");
+
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
@@ -18,7 +17,7 @@ export async function scrapping(clerkId: string, url: string) {
         });
 
         await page.setViewport({ width: 1920, height: 1080 });
-        console.log("Redirected url : ", page.url());
+        // console.log("Redirected url : ", page.url());
         const html = await page.content();
         // console.log("Here is the page html :",html)
         const $ = cheerio.load(html);
@@ -26,35 +25,35 @@ export async function scrapping(clerkId: string, url: string) {
 
         //price , url of image,brand , title, mrp , discounted price , discount percentage,rating ,description
         //Fetch title 
-        console.log("Fetching the values")
+        // console.log("Fetching the values")
         const title = $("span#productTitle.a-size-large.product-title-word-break").text();
-        console.log("Title : ", title)
+        // console.log("Title : ", title)
 
         //Symbol of the currency 
         const symbol = $("span.a-price-symbol").first().text().trim();
-        console.log("Symbol : ", symbol)
+        // console.log("Symbol : ", symbol)
 
         //Actual price
         const price = $("span.a-size-small.aok-offscreen").text().replace(/[^\d.,]/g, '').replace(/^\.*/, '').trim();
-        console.log("Price : ", price)
+        // console.log("Price : ", price)
 
         //Discounted price
         const discountedPrice = $("span.a-price-whole").first().text().trim();
-        console.log("Discounted Price : ", discountedPrice)
+        // console.log("Discounted Price : ", discountedPrice)
 
         //Discount Percentage 
         const discountPercentage = $('span.savingsPercentage').text().trim().replace(/[^0-9]/g, '');
-        console.log("Discount Percentage : ", discountPercentage)
+        // console.log("Discount Percentage : ", discountPercentage)
 
 
         //Image Url of the product
         const imageUrl = $('img#landingImage').attr('src');
-        console.log("IMage url : ", imageUrl)
+        // console.log("IMage url : ", imageUrl)
         const descriptions: string[] = [];
         $('ul.a-unordered-list.a-vertical.a-spacing-mini li span.a-list-item').each((i, element) => {
             descriptions.push($(element).text().trim());
         });
-        console.log("Description : ", descriptions);
+        // console.log("Description : ", descriptions);
 
         //fetching userId from the clerkId  
         const resultU = await getUserIdfromClerkId(clerkId);
@@ -63,7 +62,19 @@ export async function scrapping(clerkId: string, url: string) {
         }
 
         const userId: string = resultU.id ?? '';
-        console.log("User id : ", userId)
+        // console.log("User id : ", userId)
+
+        const ifExist = await prisma.product.findFirst({
+            where: {
+                userId: userId,
+                title: title
+            }
+        });
+        if (ifExist) {
+            return { success: true, message: "product product already exists for the same user" }
+        }
+
+
 
         const product = await prisma.product.create({
             data: {
@@ -79,11 +90,18 @@ export async function scrapping(clerkId: string, url: string) {
                 imageUrl: imageUrl,
                 description: descriptions,
             }
-            
-        })
 
-        console.log('Product L : ', product)
-        return { message: "Done implementing task" };
+        })
+        if (product) {
+            const result = await insertIntoPriceHistory(price, product.id)
+            if (result.success) {
+                return { success: true, message: "Done all the tasks " }
+            } else {
+                return { success: false, message: "error while inserting in the price history table " }
+
+            }
+        }
+
     } catch (error) {
         console.error("Error during scraping:");
         return { message: "Scraping failed" };
