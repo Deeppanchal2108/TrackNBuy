@@ -6,7 +6,6 @@ import { getUserIdfromClerkId } from "./userAction";
 import prisma from "@/lib/prisma";
 
 
-
 export async function scrapping(clerkId: string, url: string) {
     console.log("Into the server actions ");
     try {
@@ -27,30 +26,30 @@ export async function scrapping(clerkId: string, url: string) {
 
         //price , url of image,brand , title, mrp , discounted price , discount percentage,rating ,description
         //Fetch title 
-        console.log("Fetching the values");
-        const title = $("span#productTitle.a-size-large.product-title-word-break").text().trim();
-        // console.log("Title : ", title)
+        console.log("Fetching the values")
+        const title = $("span#productTitle.a-size-large.product-title-word-break").text();
+        console.log("Title : ", title)
 
         //Symbol of the currency 
         const symbol = $("span.a-price-symbol").first().text().trim();
-        // console.log("Symbol : ",symbol)
+        console.log("Symbol : ", symbol)
 
         //Actual price
         const price = $("span.a-size-small.aok-offscreen").text().replace(/[^\d.,]/g, '').replace(/^\.*/, '').trim();
-        // console.log("Price : ", price)
+        console.log("Price : ", price)
 
         //Discounted price
         const discountedPrice = $("span.a-price-whole").first().text().trim();
-        // console.log("Discounted Price : ", discountedPrice)
+        console.log("Discounted Price : ", discountedPrice)
 
         //Discount Percentage 
         const discountPercentage = $('span.savingsPercentage').text().trim().replace(/[^0-9]/g, '');
-        // console.log("Discount Percentage : ", discountPercentage)
+        console.log("Discount Percentage : ", discountPercentage)
+
 
         //Image Url of the product
         const imageUrl = $('img#landingImage').attr('src');
-        // console.log("IMage url : ",imageUrl)
-
+        console.log("IMage url : ", imageUrl)
         const descriptions: string[] = [];
         $('ul.a-unordered-list.a-vertical.a-spacing-mini li span.a-list-item').each((i, element) => {
             descriptions.push($(element).text().trim());
@@ -64,28 +63,29 @@ export async function scrapping(clerkId: string, url: string) {
         }
 
         const userId: string = resultU.id ?? '';
+        console.log("User id : ", userId)
 
-        
-            const product =await prisma.product.create({
-                data: {
-                    currentPrice: price,
-                    userId: userId?.toString(),
-                    url: userInputURL,
-                    redirectedUrl: page.url(),
-                    title: title,
-                    symbol: symbol,
-                    price: parseFloat(price),
-                    discountedPrice: discountedPrice,
-                    discountPercentage:parseFloat(discountPercentage),
-                    imageUrl: imageUrl,
-                    description: descriptions,
-                }
-            })
-    
-console.log('Product L : ',product)
+        const product = await prisma.product.create({
+            data: {
+                currentPrice: price,
+                userId: userId,
+                url: userInputURL,
+                redirectedUrl: page.url(),
+                title: title,
+                symbol: symbol,
+                price: price,
+                discountedPrice: discountedPrice,
+                discountPercentage: discountPercentage,
+                imageUrl: imageUrl,
+                description: descriptions,
+            }
+            
+        })
+
+        console.log('Product L : ', product)
         return { message: "Done implementing task" };
     } catch (error) {
-        console.error("Error during scraping:", error);
-        return { message: "Scraping failed", error: error };
+        console.error("Error during scraping:");
+        return { message: "Scraping failed" };
     }
 }

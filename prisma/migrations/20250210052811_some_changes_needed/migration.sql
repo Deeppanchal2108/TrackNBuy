@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "PriceHistory" ALTER COLUMN "price" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "Product" ALTER COLUMN "price" SET DATA TYPE TEXT,
+ALTER COLUMN "discountedPrice" SET DATA TYPE TEXT,
+ALTER COLUMN "currentPrice" SET DATA TYPE TEXT;

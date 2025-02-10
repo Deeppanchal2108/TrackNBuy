@@ -28,15 +28,15 @@ model User {
 model Product {
    id        String   @id @default(cuid())
   title             String    // Product title (name)
-  url               String    @unique                      // URL of the product (e.g., Amazon product link)
+  url               String                          // URL of the product (e.g., Amazon product link)
   redirectedUrl     String    // The redirected URL (e.g., final link after any redirects)
   symbol            String?   // Currency symbol (e.g., $, €, ₹)
-  price             Decimal   // Original price of the product
-  discountedPrice   Decimal?  // Discounted price of the product
-  discountPercentage Float?   // Discount percentage (if any)
+  price             String   // Original price of the product
+  discountedPrice   String?  // Discounted price of the product
+  discountPercentage String?   // Discount percentage (if any)
   imageUrl          String?   // URL of the product image
   description       String[] // Product description
-  currentPrice      Decimal   // Current price of the product
+  currentPrice      String  // Current price of the product
   createdAt         DateTime  @default(now())              // Timestamp when product was added
   updatedAt         DateTime  @updatedAt                   // Timestamp when product price was last updated
 
@@ -51,7 +51,7 @@ model Product {
 // PriceHistory model to track historical price changes
 model PriceHistory {
   id        String   @id @default(cuid())// Auto incrementing ID
-  price       Decimal   // Price of the product at a particular time
+  price       String   // Price of the product at a particular time
   date        DateTime  @default(now())               // Timestamp when the price was recorded
 
   // Foreign key reference
