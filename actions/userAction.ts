@@ -28,7 +28,7 @@ export async function syncUser(params: User) {
 
         return { success: true, message: "Successfully created user", user };
     } catch (error) {
-        console.error("Database Error:", error);
+        // console.error("Database Error:", error);
         return { success: false, message: "Failed to create user" };
     }
 }

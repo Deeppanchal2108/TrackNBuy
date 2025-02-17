@@ -26,7 +26,34 @@ export async function insertIntoPriceHistory(price: string, productId: string) {
         return { success: true, message: "Done inserting product into price history", data: productPriceHistory };
 
     } catch (error) {
-        console.error("Error inserting price history:", error);
-        return { success: false, message: "Something went wrong", error: (error as any).message };
+        // console.error("Error inserting price history:", error);
+        return { success: false, message: "Something went wrong"};
+    }
+}
+
+export async function updatePriceHistoryTable(price: string, id: string) {
+    try {
+    
+        const validatedData = priceHistorySchema.safeParse({ price, id });
+        if (!validatedData.success) {
+            return { success: false, message: "Invalid input", errors: validatedData.error };
+        }
+        const productPriceHistory = await prisma.priceHistory.update({
+            where: {
+                id
+            },
+            data: {
+                price:price
+            }
+
+        })
+        if (!productPriceHistory) {
+            return { success: false, message: "Something went wrong" };
+}
+        return { success: true, message: "Done inserting product into price history" };
+
+    } catch (error) {
+        // console.error("Error inserting price history:", error);
+        return { success: false, message: "Error occured in the update price history table" };
     }
 }
