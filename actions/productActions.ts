@@ -91,30 +91,37 @@ export async function scrapeProduct() {
                         to: 'deepanchal6677@gmail.com',
                         subject: '🔥 Price Just Dropped – Hurry Up! 🚀',
                         html: `
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-      <h2>Great News! 🎉</h2>
-      <p>The price of <strong>${result.product.title}</strong> just dropped! 💰</p>
-      <p>Old Price: <del>${result.product.price}</del></p>
-      <p><strong>New Price: ${result.product.discountedPrice}</strong></p>
-      <p>Discount: <strong>${result.product.discountPercentage}% OFF</strong></p>
-      <p>📅 Tracked at: ${new Date(result.product.updatedAt).toLocaleString()}</p>
-      <p>Don't miss out! Click below to grab it before it's gone:</p>
-      <a href="${result.product.url}" 
-         style="display:inline-block; background-color:#ff5722; color:white; padding:10px 20px; 
-                text-decoration:none; border-radius:5px; font-weight:bold;">
-        Buy Now 🚀
-      </a>
-      <p>Happy Shopping! 🛍️</p>
-    </div>
+                        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                        <h2>Great News! 🎉</h2>
+                      <p>The price of <strong>${result.product.title}</strong> just dropped! 💰</p>
+                       <p>Old Price: <del>${result.product.price}</del></p>
+                     <p><strong>New Price: ${result.product.discountedPrice}</strong></p>
+                <p>Discount: <strong>${result.product.discountPercentage}% OFF</strong></p>
+               <p>📅 Tracked at: ${new Date(result.product.updatedAt).toLocaleString()}</p>
+                <p>Don't miss out! Click below to grab it before it's gone:</p>
+                 <a href="${result.product.url}" 
+                 style="display:inline-block; background-color:#ff5722; color:white; padding:10px 20px; 
+                   text-decoration:none; border-radius:5px; font-weight:bold;">
+                 Buy Now 🚀
+                 </a>
+                   <p>Happy Shopping! 🛍️</p>
+                  </div>
   `,
                     });
+
+                    if (data) {
+                        console.log("Done sending email")
+                    }
 
                 }
             }
 
         }
-
+        return { success:true , message :"Done scraping every product"}
     } catch (error) {
         console.error("Error in scrapeProduct:", error);
+        return {
+            success: false, message: "Something went wrong in scrape product function"
+        }
     }
 }
