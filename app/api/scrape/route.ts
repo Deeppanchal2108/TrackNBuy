@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-
+import { scrapeProduct } from "@/actions/productActions";
 export async function GET() {
     try {
         const result = await scrapeProduct(); // Your function to scrape product data
