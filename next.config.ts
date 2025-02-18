@@ -1,7 +1,12 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config:any) => {
+    config.module.rules.push({
+      test: /\.map$/,
+      use: 'null-loader',
+    });
+    return config;
+  },
 };
 
 export default nextConfig;
