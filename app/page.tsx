@@ -7,6 +7,7 @@ import Footer from '@/components/Footer'
 import { scrapping } from '@/actions/scrappingUrl'
 import { useState } from 'react'
 
+import {  toast } from 'react-toastify';
 import { Button } from '@/components/ui/button'
 import { Input } from "@/components/ui/input"
 import { useUser } from '@clerk/nextjs'
@@ -38,10 +39,17 @@ export default function Home() {
     if (url.includes("amazon") || url.includes("amzn")) {
       console.log("Here comes Amazon link");
       const message = await scrapping(user.id,url);
-      console.log("Here is the message: ", message);
+      if (message?.success) {
+        toast.success(message.message)
+      } else {
+        toast.error(message?.message)
+        
+      }
     } else {
       console.log("Link is not from Amazon, hence can't track this one");
     }
+
+    setUrl("")
   };
 
 

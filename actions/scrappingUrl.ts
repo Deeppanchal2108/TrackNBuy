@@ -8,7 +8,10 @@ import { insertIntoPriceHistory } from "./priceHistory";
 export async function scrapping(clerkId: string, url: string) {
 
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            executablePath: puppeteer.executablePath(), // Ensure it uses Puppeteer's Chromium
+            headless: true
+        });
         const page = await browser.newPage();
 
         const userInputURL = url;

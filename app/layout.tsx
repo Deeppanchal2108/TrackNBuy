@@ -6,6 +6,8 @@ import {
   ClerkProvider,
 } from '@clerk/nextjs'
 
+
+import { ToastContainer, toast } from 'react-toastify';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +35,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar/>
-        {children}
+          {children}
+          <ToastContainer />
       </body>
       </html>
     </ClerkProvider>

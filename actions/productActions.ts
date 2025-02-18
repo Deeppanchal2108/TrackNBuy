@@ -66,7 +66,10 @@ export async function scrapeProduct() {
 
         for (const result of results) {
             const url = result.product.url;
-            const browser = await puppeteer.launch();
+            const browser = await puppeteer.launch({
+                executablePath: puppeteer.executablePath(),
+                headless: true
+            });
             const page = await browser.newPage();
 
             const userInputURL = url;
