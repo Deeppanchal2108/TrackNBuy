@@ -2,7 +2,7 @@ name: Scrape Product Prices
 
 on:
   schedule:
-    - cron: "10 21 * * *" # Runs at 21:10 UTC daily
+    - cron: "*/10 * * * *" # Runs at 21:10 UTC daily
   workflow_dispatch: # Allows manual trigger
 
 jobs:
