@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call Next.js API
-        run: 'curl -X GET "https://yourdomain.com/api/scrape" -H "Authorization: Bearer ${{ secrets.SCRAPE_API_KEY }}"'
+        run: 'curl -X GET "https://track-n-buy.vercel.app/api/scrape" -H "Authorization: Bearer ${{ secrets.SCRAPE_API_KEY }}"'
