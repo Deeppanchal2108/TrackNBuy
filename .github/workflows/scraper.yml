@@ -2,7 +2,7 @@ name: Scrape Product Prices
 
 on:
   schedule:
-    - cron: "10 21 * * *" # Runs every 6 hours (UTC)
+    - cron: "10 21 * * *" # Runs at 21:10 UTC daily
   workflow_dispatch: # Allows manual trigger
 
 jobs:
@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call Next.js API
-        run: curl -X GET "https://yourdomain.com/api/scrape"
+        run: 'curl -X GET "https://yourdomain.com/api/scrape" -H "Authorization: Bearer ${{ secrets.SCRAPE_API_KEY }}"'

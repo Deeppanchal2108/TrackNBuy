@@ -96,14 +96,14 @@ export async function scrapeProduct() {
                       <p>The price of <strong>${result.product.title}</strong> just dropped! 💰</p>
                        <p>Old Price: <del>${result.product.price}</del></p>
                      <p><strong>New Price: ${result.product.discountedPrice}</strong></p>
-                <p>Discount: <strong>${result.product.discountPercentage}% OFF</strong></p>
-               <p>📅 Tracked at: ${new Date(result.product.updatedAt).toLocaleString()}</p>
-                <p>Don't miss out! Click below to grab it before it's gone:</p>
-                 <a href="${result.product.url}" 
-                 style="display:inline-block; background-color:#ff5722; color:white; padding:10px 20px; 
+                     <p>Discount: <strong>${result.product.discountPercentage}% OFF</strong></p>
+                   <p>📅 Tracked at: ${new Date(result.product.updatedAt).toLocaleString()}</p>
+                    <p>Don't miss out! Click below to grab it before it's gone:</p>
+                   <a href="${result.product.url}" 
+                   style="display:inline-block; background-color:#ff5722; color:white; padding:10px 20px; 
                    text-decoration:none; border-radius:5px; font-weight:bold;">
-                 Buy Now 🚀
-                 </a>
+                  Buy Now 🚀
+                   </a>
                    <p>Happy Shopping! 🛍️</p>
                   </div>
   `,
