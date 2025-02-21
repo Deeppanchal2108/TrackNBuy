@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-
+import { SignUpButton } from "@clerk/nextjs";
 import { Button } from '@/components/ui/button';
 import { CircleCheckBig, ArrowRight } from 'lucide-react';
 
@@ -48,12 +48,14 @@ function HeroSection() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 ">
-                    <Button
-                        className="bg-[#4a154b] text-white px-8 py-6 text-lg rounded-xl hover:bg-[#3a0e3a] font-sans font-semibold transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg group"
-                    >
-                        Get Started Free
-                        <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
-                    </Button>
+                    <SignUpButton mode="modal">
+                        <Button
+                            className="bg-[#4a154b] text-white px-8 py-6 text-lg rounded-xl hover:bg-[#3a0e3a] font-sans font-semibold transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg group"
+                        >
+                            Get Started Free
+                            <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
+                        </Button>
+                    </SignUpButton>
                  
                 </div>
 

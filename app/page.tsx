@@ -34,10 +34,7 @@ export default function Home() {
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
-     console.log("Hello");
-    console.log("Here is the user entered URL: ", url);
     if (url.includes("amazon") || url.includes("amzn")) {
-      console.log("Here comes Amazon link");
       const message = await scrapping(user.id,url);
       if (message?.success) {
         toast.success(message.message)
@@ -46,7 +43,7 @@ export default function Home() {
         
       }
     } else {
-      console.log("Link is not from Amazon, hence can't track this one");
+      toast.warning("Link is not from Amazon, hence can't track this one");
     }
 
     setUrl("")
