@@ -7,14 +7,14 @@ import Footer from '@/components/Footer'
 import { scrapping } from '@/actions/scrappingUrl'
 import { useState } from 'react'
 
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Button } from '@/components/ui/button'
 import { Input } from "@/components/ui/input"
 import { useUser } from '@clerk/nextjs'
 
 export default function Home() {
-  
-  const  {user}  = useUser();
+
+  const { user } = useUser();
 
   const [url, setUrl] = useState('');
   if (!user) {
@@ -32,15 +32,15 @@ export default function Home() {
   console.log("User : ", user)
 
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (url.includes("amazon") || url.includes("amzn")) {
-      const message = await scrapping(user.id,url);
+      const message = await scrapping(user.id, url);
       if (message?.success) {
         toast.success(message.message)
       } else {
         toast.error(message?.message)
-        
+
       }
     } else {
       toast.warning("Link is not from Amazon, hence can't track this one");
@@ -51,27 +51,37 @@ export default function Home() {
 
 
   return (
-    <div className="h-screen w-full bg-black bg-dot-white/[0.2] flex items-center justify-center relative">
-      <div className="absolute inset-0 flex items-center justify-center bg-black pointer-events-none [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-      <div className="text-center relative z-20">
-        <h1 className="text-4xl sm:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-4">
-          TrackNBuy
-        </h1>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 max-w-md mx-auto">
+    <div className="min-h-screen w-full bg-[#13111C]">
+      {/* Search Bar Section */}
+      <div className="relative z-20 p-6">
+        <div className="flex gap-3 max-w-xl p-4">
           <Input
             type="url"
-            placeholder="Enter Amazon URL here"
-            value={url} // Controlled input tied to state
-            onChange={(e) => setUrl(e.target.value)} // Update state on input change
-            className="w-full font-sans px-4 py-2 rounded-md border border-neutral-500 text-black bg-white focus:outline-none focus:ring focus:ring-neutral-300"
+            placeholder="Paste Amazon product link to track..."
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-purple-400/50 text-white/90 placeholder:text-gray-500 focus:border-purple-500 focus:ring-0 text-sm px-4 py-2 rounded-none"
           />
           <Button
             type="button"
             onClick={handleSubmit}
-            className="px-6 py-2 rounded-md text-white bg-gradient-to-r from-gray-900 to-gray-500 hover:from-blue-500 hover:to-green-400 transition-all"
+            className="bg-[#2a2438] hover:bg-[#352b47] text-purple-300 px-8 transition-all duration-300 rounded-none"
           >
             Track
           </Button>
+        </div>
+      </div>
+
+      {/* Separator Line */}
+      <div className="w-full px-6">
+        <div className="h-[1px] bg-[#2a2438]"></div>
+      </div>
+
+      {/* Products Display Section */}
+      <div className="relative z-20 px-6 py-8">
+        <h2 className="text-xl font-medium text-white/90 mb-6">Products</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {/* Products will be added here later */}
         </div>
       </div>
     </div>
