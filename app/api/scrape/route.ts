@@ -3,7 +3,7 @@ import { scrapeProduct } from "@/actions/productActions";
 
 export async function GET(req:NextRequest) {
     try {
- 
+        console.log("Scraping started ");
         const result = await scrapeProduct();
         if (result?.success) {
             return NextResponse.json(

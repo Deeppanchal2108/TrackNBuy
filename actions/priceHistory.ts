@@ -2,10 +2,6 @@
 import prisma from "@/lib/prisma"
 import { z } from "zod"
 
-const priceHistorySchema = z.object({
-    price: z.string(),
-    productId: z.string()
-});
 
 export async function insertIntoPriceHistory(price: string, productId: string) {
     try {
@@ -34,10 +30,7 @@ export async function insertIntoPriceHistory(price: string, productId: string) {
 export async function updatePriceHistoryTable(price: string, id: string) {
     try {
     
-        const validatedData = priceHistorySchema.safeParse({ price, id });
-        if (!validatedData.success) {
-            return { success: false, message: "Invalid input", errors: validatedData.error };
-        }
+        
         const productPriceHistory = await prisma.priceHistory.update({
             where: {
                 id
