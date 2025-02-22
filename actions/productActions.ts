@@ -128,3 +128,17 @@ export async function scrapeProduct() {
         }
     }
 }
+
+export async function getProducts(userId:string) {
+    try {
+        const products=await prisma.product.findMany({
+            where:{
+                userId:userId
+            }
+        })
+        return {success:true,message:"Successfully fetched products",data:products}
+        
+    } catch (error) {
+        return {success:false,message:"Something went wrong in getProducts function"}
+    }
+}

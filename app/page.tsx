@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { Button } from '@/components/ui/button'
 import { Input } from "@/components/ui/input"
 import { useUser } from '@clerk/nextjs'
-
+import ProductContainer from '@/components/ProductContainer'
 export default function Home() {
 
   const { user } = useUser();
@@ -29,7 +29,7 @@ export default function Home() {
     );
   }
 
-  console.log("User : ", user)
+  // console.log("User : ", user)
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -57,15 +57,15 @@ export default function Home() {
         <div className="flex gap-3 max-w-xl p-4">
           <Input
             type="url"
-            placeholder="Paste Amazon product link to track..."
+            placeholder="Enter Amazon URL here"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-purple-400/50 text-white/90 placeholder:text-gray-500 focus:border-purple-500 focus:ring-0 text-sm px-4 py-2 rounded-none"
+            className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-purple-400/50 text-white placeholder:text-gray-400 text-sm"
           />
           <Button
             type="button"
             onClick={handleSubmit}
-            className="bg-[#2a2438] hover:bg-[#352b47] text-purple-300 px-8 transition-all duration-300 rounded-none"
+            className="bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 px-8 transition-all duration-300"
           >
             Track
           </Button>
@@ -74,16 +74,13 @@ export default function Home() {
 
       {/* Separator Line */}
       <div className="w-full px-6">
-        <div className="h-[1px] bg-[#2a2438]"></div>
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
       </div>
 
       {/* Products Display Section */}
-      <div className="relative z-20 px-6 py-8">
-        <h2 className="text-xl font-medium text-white/90 mb-6">Products</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {/* Products will be added here later */}
-        </div>
-      </div>
+    
+          <ProductContainer clerkId={user.id} />
+        
     </div>
   );
 }
